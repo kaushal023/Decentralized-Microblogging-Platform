@@ -6,9 +6,6 @@ import Main from './Main'
 import Web3 from 'web3';
 import './App.css';
 
-//Declare IPFS
-const ipfsClient = require('ipfs-http-client')
-const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' }) // leaving out the arguments will default to these values
 
 class App extends Component {
 
@@ -86,50 +83,11 @@ class App extends Component {
   }
 
 
-
-  captureFile = event => {
-
-    event.preventDefault()
-    const file = event.target.files[0]
-    const reader = new window.FileReader()
-    reader.readAsArrayBuffer(file)
-
-    reader.onloadend = () => {
-      this.setState({ buffer: Buffer(reader.result) })
-      console.log('buffer', this.state.buffer)
-    }
-  }
-
   async uploadPost(tweet) {
-    console.log("Submitting file to ipfs...")
-
-    //adding file to the IPFS
-    // ipfs.add(this.state.buffer, (error, result) => {
-    //   console.log('Ipfs result', result)
-    //   if(error) {
-    //     console.error(error)
-    //     return
-    //   }
-
-    //   this.setState({ loading: true })
-    //   this.state.decentragram.methods.uploadPost(result[0].hash, tweet).send({ from: this.state.account }).on('transactionHash', (hash) => {
-    //     this.setState({ loading: false })
-    //   })
-    // })
-
-    // this.setState({ loading: true })
-    // await this.state.decentragram.methods.uploadPost(tweet).send({ from: this.state.account }).on('transactionHash', async(hash) => {
-    //   await this.updateList()
-    //   this.setState({ loading: false })
-    // })
-
-
     this.setState({ loading: true })
-    this.state.decentragram.methods.uploadPost(tweet).send({ from: this.state.account }).on('transactionHash', (hash) => {
+    this.state.decentragram.methods.uploadPost(tweet).send({ from: this.state.account }).on('transactionHash', async (hash) => {
       window.location.reload()
-      
     })
-
 
   }
 
@@ -153,8 +111,6 @@ class App extends Component {
 
     this.uploadPost = this.uploadPost.bind(this)
     this.tipPostOwner = this.tipPostOwner.bind(this)
-    this.captureFile = this.captureFile.bind(this)
-    this.updateList = this.updateList.bind(this)
   }
 
   render() {
@@ -165,7 +121,6 @@ class App extends Component {
           ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
           : <Main
               posts={this.state.posts}
-              captureFile={this.captureFile}
               uploadPost={this.uploadPost}
               tipPostOwner={this.tipPostOwner}
             />

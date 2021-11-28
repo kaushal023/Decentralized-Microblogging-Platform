@@ -44,7 +44,7 @@ class Main extends Component {
                     </div>
                     <ul id="postList" className="list-group list-group-flush">
                       <li className="list-group-item">
-                        {/* <p class="text-center"><img src={`https://ipfs.infura.io/ipfs/${post.hash}`} style={{ maxWidth: '420px'}}/></p> */}
+                      
                         <p>{post.tweet}</p>
                       </li>
                       <li key={key} className="list-group-item py-2">
